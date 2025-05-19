@@ -1,10 +1,8 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from pydantic import BaseModel
-from typing import Optional
 import bcrypt
-import jwt
-from datetime import datetime, timedelta, timezone
-
+from typing import Literal
+from utils import create_access_token
 from models.user import UserModel
 
 SECRET_KEY = "your-secret-key"  # Replace with a secure key in production
@@ -16,6 +14,7 @@ router = APIRouter()
 class SignupRequest(BaseModel):
     username: str
     password: str
+    role: Literal["user", "admin"]
 
 class LoginRequest(BaseModel):
     username: str
@@ -25,12 +24,7 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    to_encode = data.copy()
-    expire = datetime.now(tz=timezone.utc) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+
 
 @router.post("/signup", response_model=TokenResponse)
 async def signup(payload: SignupRequest):
@@ -40,7 +34,7 @@ async def signup(payload: SignupRequest):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
     
     hashed_pw = bcrypt.hashpw(payload.password.encode("utf-8"), bcrypt.gensalt())
-    user = UserModel(username=payload.username, password=hashed_pw.decode("utf-8"), role="user")
+    user = UserModel(username=payload.username, password=hashed_pw.decode("utf-8"), role=payload.role)
     await user.insert()
     
     token = create_access_token({"username": user.username, "role": user.role})
