@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 from contextlib import asynccontextmanager
 from utils import connect_db
+from routers import auth
 
 load_dotenv()
 
@@ -12,6 +13,4 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-@app.get("/")
-async def root():
-    return "Hello world"
+app.include_router(auth.router, prefix="/auth")
