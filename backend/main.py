@@ -4,10 +4,10 @@ from contextlib import asynccontextmanager
 from utils import connect_db
 from routers import auth_router, admin_router
 
-load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    load_dotenv()
     await connect_db()
     yield
 
