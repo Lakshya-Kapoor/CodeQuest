@@ -1,13 +1,15 @@
 from fastapi import UploadFile
 import zipfile
 
-class ZipError(Exception):
+class FileError(Exception):
     pass
 
-class ZipService:
+class FileService:
     requiredFiles = set({"problem/", "problem/problem.md", "problem/inputs/", "problem/outputs/"})
     inputFolder = "problem/inputs/"
     outputFolder = "problem/outputs/"
+    MAX_ZIP_SIZE = 10 * 1024 * 1024  # 10 MB
+    MAX_FILE_SIZE = 1 * 1024 * 1024  # 1 MB
 
     @staticmethod
     def count_files(folderName: str, fileNames: set[str]):
@@ -19,8 +21,8 @@ class ZipService:
 
     @staticmethod
     def matching_IO_files(fileNames: set[str]):
-        inputFolder = ZipService.inputFolder
-        outputFolder = ZipService.outputFolder
+        inputFolder = FileService.inputFolder
+        outputFolder = FileService.outputFolder
         for fileName in fileNames:
             if fileName.startswith(inputFolder):
                 outputFile = fileName.replace(inputFolder, outputFolder)
@@ -33,29 +35,29 @@ class ZipService:
         return True
 
     @staticmethod
-    def validate(file: UploadFile):
+    def validate_zip(file: UploadFile):
         try: 
             with zipfile.ZipFile(file.file) as zf:
                 fileNames = set(zf.namelist())
 
-                missing_files = ZipService.requiredFiles - fileNames
+                missing_files = FileService.requiredFiles - fileNames
                 if missing_files:
-                    raise ZipError(f"Missing required files in the zip file: {', '.join(missing_files)}")
+                    raise FileError(f"Missing required files in the zip file: {', '.join(missing_files)}")
 
-                inputCount = ZipService.count_files(ZipService.inputFolder, fileNames)
-                outputCount = ZipService.count_files(ZipService.outputFolder, fileNames)
+                inputCount = FileService.count_files(FileService.inputFolder, fileNames)
+                outputCount = FileService.count_files(FileService.outputFolder, fileNames)
 
                 if inputCount != outputCount:
-                    raise ZipError("Number of input and output files do not match.")
+                    raise FileError("Number of input and output files do not match.")
 
                 if inputCount == 1:
-                    raise ZipError("No input/output files found.")
+                    raise FileError("No input/output files found.")
 
-                if not ZipService.matching_IO_files(fileNames):
-                    raise ZipError("Input and output files do not match.")
+                if not FileService.matching_IO_files(fileNames):
+                    raise FileError("Input and output files do not match.")
         
         except zipfile.BadZipFile:
-            raise ZipError("Uploaded file is not a valid zip file.")
+            raise FileError("Uploaded file is not a valid zip file.")
 
     @staticmethod
     def extract_problem_statement(file: UploadFile):

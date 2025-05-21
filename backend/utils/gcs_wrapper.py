@@ -1,5 +1,11 @@
 from google.cloud import storage
-from typing import IO
+from typing import IO, Awaitable
+import asyncio
+
+def async_wrap(func):
+    async def wrapper(*args, **kwargs):
+        return await asyncio.to_thread(func, *args, **kwargs)
+    return wrapper
 
 class GCSError(Exception):
     pass
@@ -7,7 +13,8 @@ class GCSError(Exception):
 class GCSWrapper:
 
     @staticmethod
-    def upload_file(blobName: str, file: 'IO[bytes]'):
+    @async_wrap
+    def upload_file(blobName: str, file: 'IO[bytes]') -> Awaitable[None]:
         try:
             client = storage.Client()
             bucket = client.bucket("trial-bucket-213")
@@ -18,7 +25,8 @@ class GCSWrapper:
             raise GCSError("Failed to upload file")
 
     @staticmethod
-    def delete_file(blobName: str):
+    @async_wrap
+    def delete_file(blobName: str) -> Awaitable[None]:
         try:
             client = storage.Client()
             bucket = client.bucket("trial-bucket-213")

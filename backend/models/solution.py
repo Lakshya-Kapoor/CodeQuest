@@ -9,3 +9,6 @@ class SolutionModel(Document):
     problem: PydanticObjectId
     user: PydanticObjectId
     status: Literal["pending", "accepted", "wrong answer", "runtime error", "compile error", "time limit exceeded", "memory limit exceeded"]
+
+    class Settings:
+        name = "solution"

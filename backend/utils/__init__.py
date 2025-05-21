@@ -1,7 +1,7 @@
 from .db import connect_db
 from .auth import create_access_token, verify_jwt_token, is_admin, is_user
-from .zip import ZipService, ZipError
-from .gcs import GCSError, GCSWrapper
+from .file_service import FileService, FileError
+from .gcs_wrapper import GCSError, GCSWrapper
 
 __all__ = [
     "connect_db",
@@ -9,8 +9,8 @@ __all__ = [
     "verify_jwt_token",
     "is_admin",
     "is_user",
-    "ZipService",
-    "ZipError",
+    "FileService",
+    "FileError",
     "GCSError",
     "GCSWrapper"
 ]

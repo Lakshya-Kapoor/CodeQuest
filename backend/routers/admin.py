@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, File, Form, UploadFile, HTTPException, status
 from models import ProblemModel, UserModel
-from utils import is_admin, ZipService, ZipError, GCSError, GCSWrapper
+from utils import is_admin, FileService, FileError, GCSError, GCSWrapper
 from pydantic import BaseModel
 from typing import Literal
 from beanie import PydanticObjectId
@@ -18,8 +18,8 @@ async def create_question(
 ):
 
     try:
-        ZipService.validate(file)
-        problemStatement = ZipService.extract_problem_statement(file)
+        FileService.validate_zip(file)
+        problemStatement = FileService.extract_problem_statement(file)
 
         problem = ProblemModel(
             title=title,
@@ -32,11 +32,11 @@ async def create_question(
         await problem.insert()
 
         blobName = f"problems/{problem.id}"
-        GCSWrapper.upload_file(blobName, file.file)
+        await GCSWrapper.upload_file(blobName, file.file)
 
         return {"message": "Question created successfully"}
 
-    except ZipError as e:
+    except FileError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except GCSError as e:
         await problem.delete()
@@ -57,11 +57,13 @@ async def delete_question(problem_id: str, jwtPayload = Depends(is_admin)):
         if not problem or problem.author != PydanticObjectId(jwtPayload["id"]):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Problem not found")
 
-        GCSWrapper.delete_file(f"problems/{problem.id}")
+        await GCSWrapper.delete_file(f"problems/{problem.id}")
         await problem.delete()
         return {"message": "Question deleted successfully"}
 
     except GCSError as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     except Exception as e:
+        if isinstance(e, HTTPException):
+            raise e
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Server error")
