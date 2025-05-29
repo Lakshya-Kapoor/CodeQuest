@@ -30,7 +30,7 @@ export default function TableHeader({ sortConfig, onSort }: TableHeaderProps) {
   }
 
   return (
-    <thead className="bg-background border-b border-border">
+    <thead className="border-b border-border">
       <tr>
         <th
           className={`${getHeaderClasses("title")} w-[70%]`}

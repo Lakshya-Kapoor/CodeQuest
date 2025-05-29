@@ -14,9 +14,5 @@ export default async function Page() {
 
   problems.forEach((problem) => (problem.accuracy = 60));
 
-  return (
-    <main className="mt-10 flex-grow flex justify-center items-start">
-      <ProblemsTable problems={problems} />
-    </main>
-  );
+  return <ProblemsTable problems={problems} />;
 }

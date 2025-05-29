@@ -1,4 +1,4 @@
-export default function Badge({
+export default function DifficultyBadge({
   difficulty,
 }: {
   difficulty: "easy" | "medium" | "hard";

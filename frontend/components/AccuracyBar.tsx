@@ -8,9 +8,9 @@ export default function AccuracyBar({ accuracy }: { accuracy: number }) {
 
   return (
     <div className="flex items-center space-x-2 w-full">
-      <div className="w-full h-2 bg-accent rounded-full overflow-hidden">
+      <div className="w-full h-2 bg-accent rounded-full overflow-hidden min-w-16">
         <div
-          className={`h-full ${getColor()} transition-all duration-500 ease-out`}
+          className={`h-full ${getColor()} transition-all duration-500 ease-out `}
           style={{ width: `${accuracy}%` }}
         ></div>
       </div>

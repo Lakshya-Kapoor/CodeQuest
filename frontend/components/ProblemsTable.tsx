@@ -83,7 +83,7 @@ export default function ProblemsTable({ problems }: { problems: Problem[] }) {
   }, [searchTerm]);
 
   return (
-    <div className="lg:w-[70%] md:w-[80%] w-[90%] overflow-hidden rounded-lg shadow-lg bg-background border border-border">
+    <div className="lg:w-[70%] md:w-[80%] w-[90%] overflow-hidden rounded-lg shadow-lg border border-border">
       <div className="px-6 py-4">
         <SearchBar value={searchTerm} onChange={setSearchTerm} />
       </div>

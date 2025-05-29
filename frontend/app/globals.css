@@ -118,3 +118,32 @@
     @apply bg-background text-foreground;
   }
 }
+
+.problem-statement h1,
+h2,
+h3 {
+  @apply text-xl font-medium mt-3;
+}
+
+.problem-statement p {
+  @apply font-light;
+}
+
+.problem-statement pre {
+  @apply bg-sidebar text-card-foreground p-4 rounded-lg overflow-x-auto mt-1 mb-4;
+}
+
+.problem-statement strong {
+  @apply font-semibold;
+}
+
+.problem-statement ul {
+  @apply list-disc my-2;
+}
+
+.problem-statement ol {
+  @apply list-decimal my-2;
+}
+.problem-statement li {
+  @apply ml-6;
+}

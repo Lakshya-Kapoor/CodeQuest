@@ -20,7 +20,7 @@ export default function Pagination({
   const disabledClass = "text-muted-foreground cursor-not-allowed";
 
   return (
-    <div className="flex items-center justify-between py-3 bg-background">
+    <div className="flex items-center justify-between py-3">
       <div>
         <p className="text-sm text-muted-foreground">
           Showing{" "}

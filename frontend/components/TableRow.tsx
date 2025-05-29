@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { Problem } from "@/lib/custom-types";
-import Badge from "./Badge";
+import Badge from "./DifficultyBadge";
 import AccuracyBar from "./AccuracyBar";
 
 export default function TableRow({ problem }: { problem: Problem }) {
