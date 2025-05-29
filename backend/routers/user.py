@@ -60,3 +60,13 @@ async def get_problems():
         return problems
     except Exception as e:
         raise HTTPException(status_code=500, detail="Server error")
+    
+@router.get("/problems/{problem_id}")
+async def get_problem(problem_id: str):
+    try:
+        problem = await ProblemModel.get(PydanticObjectId(problem_id))
+        if not problem:
+            raise HTTPException(status_code=404, detail="Problem not found")
+        return problem
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Server error")

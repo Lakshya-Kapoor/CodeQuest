@@ -12,7 +12,7 @@ class ProblemModel(Document):
     author: PydanticObjectId
     timeLimit: int # in seconds
     memoryLimit: int # in MB
-    createdAt: datetime = datetime.now(UTC)    
+    createdAt: datetime = datetime.now(UTC) 
 
     class Settings:
         name = "problem"
