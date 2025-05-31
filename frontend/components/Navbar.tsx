@@ -1,8 +1,8 @@
 import Link from "next/link";
-import React from "react";
-import { Button } from "./ui/button";
 import { getUser } from "@/lib/auth";
 import LogoutButton from "./ui/LogoutButton";
+import LoginButton from "./ui/LoginButton";
+import ThemeToggle from "./theme-toggle";
 
 export default async function Navbar() {
   const user = await getUser();
@@ -31,13 +31,10 @@ export default async function Navbar() {
           </Link>
         </div>
       </div>
-      {user ? (
-        <LogoutButton />
-      ) : (
-        <Button>
-          <Link href="/login">Login</Link>
-        </Button>
-      )}
+      <div className="flex items-center gap-4">
+        <ThemeToggle />
+        {user ? <LogoutButton /> : <LoginButton />}
+      </div>
     </nav>
   );
 }

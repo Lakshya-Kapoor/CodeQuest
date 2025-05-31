@@ -46,9 +46,7 @@ export default function AuthForm({ type }: { type: "login" | "signup" }) {
     if (res.ok) {
       const data = await res.json();
       document.cookie = `access_token=${data.access_token}; path=/; secure; samesite=strict`;
-
-      console.log("Login successful:", data);
-      router.push("/problems");
+      router.refresh();
     } else {
       console.error("Login failed");
     }

@@ -7,7 +7,7 @@ export default async function Page() {
   });
 
   if (!res.ok) {
-    return <div className="text-2xl">Error fetching problems</div>;
+    return <div>Error fetching problems</div>;
   }
 
   const problems: Problem[] = await res.json();

@@ -11,5 +11,9 @@ export default function LogoutButton() {
     router.refresh();
   }
 
-  return <Button onClick={handleLogout}>Logout</Button>;
+  return (
+    <Button className="hover:cursor-pointer" onClick={handleLogout}>
+      Logout
+    </Button>
+  );
 }

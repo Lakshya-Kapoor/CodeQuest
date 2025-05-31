@@ -22,7 +22,13 @@ const languages = [
   { value: "javascript", label: "JavaScript" },
 ];
 
-export default function SubmitSolCard({ problemId }: { problemId: string }) {
+export default function SubmitSolCard({
+  problemId,
+  accessToken,
+}: {
+  problemId: string;
+  accessToken?: string;
+}) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -33,15 +39,15 @@ export default function SubmitSolCard({ problemId }: { problemId: string }) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/submissions`, {
       method: "POST",
       body: formData,
-      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
     if (!res.ok) {
       console.error("Submission failed");
       return;
     } else {
-      const data = await res.json();
-      console.log("Submission successful:", data);
       router.refresh();
       setOpen(false);
     }

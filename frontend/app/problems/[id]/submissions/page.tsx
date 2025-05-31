@@ -26,7 +26,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <>
-      <SubmitSolCard problemId={id} />
+      <SubmitSolCard problemId={id} accessToken={access_token} />
       <SubmissionsTable submissions={submissions} />
     </>
   );
