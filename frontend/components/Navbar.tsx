@@ -1,8 +1,12 @@
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
+import { getUser } from "@/lib/auth";
+import LogoutButton from "./ui/LogoutButton";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const user = await getUser();
+
   return (
     <nav className="sticky top-0 left-0 w-full z-50 bg-background h-16 flex items-center justify-between px-10 shadow-lg border-b-2 border-border">
       <div className="flex items-center gap-14">
@@ -27,11 +31,13 @@ export default function Navbar() {
           </Link>
         </div>
       </div>
-      <div>
-        <Button asChild>
+      {user ? (
+        <LogoutButton />
+      ) : (
+        <Button>
           <Link href="/login">Login</Link>
         </Button>
-      </div>
+      )}
     </nav>
   );
 }

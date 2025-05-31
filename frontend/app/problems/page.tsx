@@ -2,7 +2,7 @@ import ProblemsTable from "@/components/ProblemsTable";
 import { Problem } from "@/lib/custom-types";
 
 export default async function Page() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/user/problems`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/problems`, {
     next: { revalidate: 60 },
   });
 

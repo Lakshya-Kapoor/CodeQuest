@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Problem, SortConfig } from "@/lib/custom-types";
-import TableHeader from "./TableHeader";
-import TableRow from "./TableRow";
-import SearchBar from "./SearchBar";
-import Pagination from "./Pagination";
+import TableHeader from "./ui/ProblemTableHeader";
+import TableRow from "./ui/ProblemTableRow";
+import SearchBar from "./ui/SearchBar";
+import Pagination from "./ui/Pagination";
 
-const PROBLEMS_PER_PAGE = 5;
+const PROBLEMS_PER_PAGE = 50;
 
 export default function ProblemsTable({ problems }: { problems: Problem[] }) {
   const [sortConfig, setSortConfig] = useState<SortConfig>({
@@ -78,12 +78,12 @@ export default function ProblemsTable({ problems }: { problems: Problem[] }) {
   }, [filteredAndSortedProblems, currentPage]);
 
   // Reset to first page when search term changes
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
   return (
-    <div className="lg:w-[70%] md:w-[80%] w-[90%] overflow-hidden rounded-lg shadow-lg border border-border">
+    <div className="w-full overflow-hidden rounded-lg shadow-lg border border-border mx-auto">
       <div className="px-6 py-4">
         <SearchBar value={searchTerm} onChange={setSearchTerm} />
       </div>

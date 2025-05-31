@@ -7,7 +7,10 @@ type TableHeaderProps = {
   onSort: (key: "title" | "difficulty" | "accuracy") => void;
 };
 
-export default function TableHeader({ sortConfig, onSort }: TableHeaderProps) {
+export default function ProblemTableHeader({
+  sortConfig,
+  onSort,
+}: TableHeaderProps) {
   function renderSortIcon(key: "title" | "difficulty" | "accuracy") {
     if (sortConfig.key !== key || sortConfig.direction === null) return null;
 

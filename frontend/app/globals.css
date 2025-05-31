@@ -119,31 +119,57 @@
   }
 }
 
-.problem-statement h1,
-h2,
-h3 {
-  @apply text-xl font-medium mt-3;
+.problem-statement h1 {
+  @apply text-2xl font-bold mt-4 mb-2 text-primary;
+  line-height: 1.2;
+}
+
+.problem-statement h2 {
+  @apply text-xl font-semibold mt-4 mb-1 text-primary;
+  line-height: 1.25;
+}
+
+.problem-statement h3 {
+  @apply text-lg font-semibold mt-2 mb-1 text-primary;
+  line-height: 1.3;
 }
 
 .problem-statement p {
-  @apply font-light;
+  @apply font-light mb-2 text-base;
 }
 
 .problem-statement pre {
-  @apply bg-sidebar text-card-foreground p-4 rounded-lg overflow-x-auto mt-1 mb-4;
+  @apply bg-sidebar text-card-foreground p-2 rounded-lg overflow-x-auto mt-2 mb-2 font-mono border border-border;
+}
+
+.problem-statement code {
+  @apply text-primary px-1 py-0.5 rounded font-mono;
 }
 
 .problem-statement strong {
-  @apply font-semibold;
+  @apply font-semibold text-primary;
 }
 
 .problem-statement ul {
-  @apply list-disc my-2;
+  @apply list-disc my-2 pl-6 space-y-1;
 }
 
 .problem-statement ol {
-  @apply list-decimal my-2;
+  @apply list-decimal my-2 pl-6 space-y-1;
 }
+
 .problem-statement li {
-  @apply ml-6;
+  @apply ml-0;
+}
+
+.problem-statement blockquote {
+  @apply border-l-4 border-primary pl-3 italic text-muted-foreground my-3 py-1 bg-muted/50 rounded;
+}
+
+.problem-statement img {
+  @apply my-3 rounded-lg shadow max-w-full mx-auto;
+}
+
+.problem-statement a {
+  @apply text-blue-600 underline underline-offset-2 hover:text-blue-800 transition-colors;
 }

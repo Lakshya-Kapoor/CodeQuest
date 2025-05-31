@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,14 +13,40 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-export default function AuthForm({
-  type,
-  onSubmit,
-}: {
-  type: "login" | "signup";
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-}) {
+export default function AuthForm({ type }: { type: "login" | "signup" }) {
+  const router = useRouter();
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const body: any = {
+      username: formData.get("username"),
+      password: formData.get("password"),
+    };
+
+    if (type === "signup") {
+      body["role"] = formData.get("role");
+    }
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/auth/${type}`,
+      {
+        method: "POST",
+        body: JSON.stringify(body),
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (res.ok) {
+      router.push("/problems");
+    } else {
+      console.error("Login failed");
+    }
+  }
+
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
@@ -30,7 +58,7 @@ export default function AuthForm({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={onSubmit}>
+              <form onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-6">
                   <div className="grid gap-2">
                     <Label htmlFor="username">Username</Label>
@@ -67,7 +95,7 @@ export default function AuthForm({
                     />
                   </div>
                   <Button type="submit" className="w-full hover:cursor-pointer">
-                    Signup
+                    {type === "login" ? "Login" : "Signup"}
                   </Button>
                 </div>
                 {type === "login" ? (

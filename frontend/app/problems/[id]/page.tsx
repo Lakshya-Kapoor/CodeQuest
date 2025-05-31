@@ -1,5 +1,5 @@
 import { Problem } from "@/lib/custom-types";
-import AccuracyBar from "@/components/AccuracyBar";
+import AccuracyBar from "@/components/ui/AccuracyBar";
 import ReactMarkdown from "react-markdown";
 import DifficultyBadge from "@/components/DifficultyBadge";
 import { BarChart2, HardDrive, Target, TimerIcon } from "lucide-react";
@@ -14,7 +14,7 @@ type Props = {
 export default async function Page({ params }: Props) {
   const { id } = await params;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/user/problems/${id}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/problems/${id}`,
     {
       next: { revalidate: 60 },
     }
@@ -29,8 +29,8 @@ export default async function Page({ params }: Props) {
   problem.tags = ["math", "greedy", "dynamic programming"];
 
   return (
-    <div className="border border-border p-7 rounded-lg flex flex-col items-start gap-5 2xl:w-[75%] w-full">
-      <h1 className="text-2xl font-medium text-primary">{problem.title}</h1>
+    <div className="border border-border p-7 rounded-lg flex flex-col items-start gap-5">
+      <h1 className="text-3xl font-bold text-primary">{problem.title}</h1>
       {problem.tags.length > 0 && (
         <div className="flex items-center gap-2">
           {problem.tags.map((tag) => (

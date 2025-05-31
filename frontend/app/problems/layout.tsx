@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
-      <main className="flex-grow flex flex-col items-center p-10">
+      <main className="2xl:w-[75%] xl:w-[85%] w-full mx-auto space-y-4 p-10">
         {children}
       </main>
     </>
