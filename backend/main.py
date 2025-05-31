@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from environs import Env
 from contextlib import asynccontextmanager
 from utils import connect_db
-from routers import auth_router, admin_router, user_router
+from routers import *
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -26,5 +26,5 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/auth")
-app.include_router(admin_router, prefix="/admin")
-app.include_router(user_router, prefix="/user")
+app.include_router(problem_router, prefix="/problems")
+app.include_router(submission_router, prefix="/submissions")

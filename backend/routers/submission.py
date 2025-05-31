@@ -1,13 +1,13 @@
 from fastapi import APIRouter, File, Form, UploadFile, Depends, HTTPException
 from utils import verify_jwt_token, FileService, GCSWrapper, GCSError
 from typing import Literal
-from models import SolutionModel, ProblemModel
+from models import SubmissionModel, ProblemModel
 from beanie import PydanticObjectId
 
 router = APIRouter()
 
-@router.post("/solutions")
-async def create_solution(
+@router.post("")
+async def create_submission(
     jwtPayload = Depends(verify_jwt_token),
     file: UploadFile = File(...),
     problem_id: str = Form(...),
@@ -22,51 +22,51 @@ async def create_solution(
         if len(content) > FileService.MAX_FILE_SIZE:
             raise HTTPException(status_code=400, detail="File size exceeds 1 MB")
         
-        solution = SolutionModel(
+        submission = SubmissionModel(
             user=PydanticObjectId(jwtPayload["id"]),
             problem=PydanticObjectId(problem_id),
             language=language,
             status="pending"
         )
-        await solution.insert()
+        await submission.insert()
 
-        blobName = f"solutions/{solution.id}"
+        blobName = f"submissions/{submission.id}"
         await GCSWrapper.upload_file(blobName, file.file)
         
-        return {"message": "Solution submitted successfully"}
+        return {"message": "Submission submitted successfully"}
     
     except GCSError as e:
-        await solution.delete()
+        await submission.delete()
         raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
         if isinstance(e, HTTPException):
             raise e
         raise HTTPException(status_code=500, detail="Server error")
 
-@router.get("/solutions")
-async def get_solutions(jwtPayload = Depends(verify_jwt_token), problem_id: str | None = None):
+@router.get("")
+async def get_submissions(jwtPayload = Depends(verify_jwt_token), problem_id: str | None = None):
     try:
-        solutions = await SolutionModel.find(SolutionModel.user == PydanticObjectId(jwtPayload["id"])).to_list()
+        submissions = await SubmissionModel.find(SubmissionModel.user == PydanticObjectId(jwtPayload["id"])).to_list()
         if problem_id:
-            solutions = [sol for sol in solutions if str(sol.problem) == problem_id]
-        return solutions
+            submissions = [sub for sub in submissions if str(sub.problem) == problem_id]
+        return submissions
     except Exception as e:
         raise HTTPException(status_code=500, detail="Server error")
 
-@router.get("/problems")
-async def get_problems():
+@router.get("/{submission_id}/code")
+async def get_submission_code(submission_id: str, jwtPayload = Depends(verify_jwt_token)):
     try:
-        problems = await ProblemModel.find_all().to_list()
-        return problems
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Server error")
+        submission = await SubmissionModel.get(PydanticObjectId(submission_id))
+        if not submission or submission.user != PydanticObjectId(jwtPayload["id"]):
+            raise HTTPException(status_code=404, detail="Submission not found")
+
+        blobName = f"submissions/{submission.id}"
+        code = await GCSWrapper.read_file(blobName)
+        return code
     
-@router.get("/problems/{problem_id}")
-async def get_problem(problem_id: str):
-    try:
-        problem = await ProblemModel.get(PydanticObjectId(problem_id))
-        if not problem:
-            raise HTTPException(status_code=404, detail="Problem not found")
-        return problem
+    except GCSError as e:
+        raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
+        if isinstance(e, HTTPException):
+            raise e
         raise HTTPException(status_code=500, detail="Server error")

@@ -1,5 +1,5 @@
 from .problem import ProblemModel
 from .user import UserModel
-from .solution import SolutionModel
+from .submission import SubmissionModel
 
-__all__ = ["ProblemModel", "UserModel", "SolutionModel"]
+__all__ = ["ProblemModel", "UserModel", "SubmissionModel"]

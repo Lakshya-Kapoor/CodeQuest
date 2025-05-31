@@ -35,3 +35,15 @@ class GCSWrapper:
         except Exception as e:
             print(e)
             raise GCSError("Failed to delete file")
+
+    @staticmethod
+    @async_wrap
+    def read_file(blobName: str) -> Awaitable[str]:
+        try:
+            client = storage.Client()
+            bucket = client.bucket("trial-bucket-213")
+            blob = bucket.blob(blobName)
+            return blob.download_as_text()
+        except Exception as e:
+            print(e)
+            raise GCSError("Failed to read file")
