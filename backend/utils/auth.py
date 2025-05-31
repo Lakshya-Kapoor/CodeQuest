@@ -20,14 +20,17 @@ def verify_jwt_token(request: Request):
     ALGORITHM = os.getenv("JWT_ALGORITHM")
     access_token = request.cookies.get("access_token")
     if not access_token:
+        print("No access token: ", access_token)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
     
     try:
         payload = jwt.decode(access_token, JWT_SECRET, algorithms=[ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
+        print("Token expired")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired")
     except jwt.InvalidTokenError:
+        print("Invalid token")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
     
 def is_admin(payload: dict = Depends(verify_jwt_token)):
