@@ -37,7 +37,7 @@ async def signup(payload: SignupRequest, response: Response):
         value=token,
         httponly=True,
         samesite="lax",
-        secure=False
+        secure=True
     )
     return TokenResponse(access_token=token)
 
@@ -54,7 +54,7 @@ async def login(payload: LoginRequest, response: Response):
         value=token,
         httponly=True,
         samesite="lax",
-        secure=False
+        secure=True
     )
     return TokenResponse(access_token=token)
 
