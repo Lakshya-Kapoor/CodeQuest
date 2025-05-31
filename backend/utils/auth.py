@@ -19,6 +19,9 @@ def verify_jwt_token(request: Request):
     JWT_SECRET = os.getenv("JWT_SECRET")
     ALGORITHM = os.getenv("JWT_ALGORITHM")
     access_token = request.cookies.get("access_token")
+    print(access_token)
+    print(JWT_SECRET)
+    print(ALGORITHM)
     if not access_token:
         print("No access token: ", access_token)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
