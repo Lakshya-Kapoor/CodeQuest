@@ -1,15 +1,10 @@
+import { PageProps } from "@/.next/types/app/page";
 import SubmissionsTable from "@/components/SubmissionsTable";
 import SubmitSolCard from "@/components/ui/SubmitSolCard";
 import { Submission } from "@/lib/custom-types";
 import { cookies } from "next/headers";
 
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: PageProps) {
   const { id } = await params;
   const cookieStore = await cookies();
   const access_token = cookieStore.get("access_token")?.value;

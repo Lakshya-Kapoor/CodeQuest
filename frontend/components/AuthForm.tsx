@@ -21,7 +21,11 @@ export default function AuthForm({ type }: { type: "login" | "signup" }) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const body: any = {
+    const body: {
+      username: FormDataEntryValue | null;
+      password: FormDataEntryValue | null;
+      role?: FormDataEntryValue | null;
+    } = {
       username: formData.get("username"),
       password: formData.get("password"),
     };
@@ -41,6 +45,8 @@ export default function AuthForm({ type }: { type: "login" | "signup" }) {
     );
 
     if (res.ok) {
+      const data = await res.json();
+      console.log("Login successful:", data);
       router.push("/problems");
     } else {
       console.error("Login failed");

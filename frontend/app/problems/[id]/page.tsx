@@ -4,14 +4,9 @@ import ReactMarkdown from "react-markdown";
 import DifficultyBadge from "@/components/DifficultyBadge";
 import { BarChart2, HardDrive, Target, TimerIcon } from "lucide-react";
 import TagBadge from "@/components/TagBadge";
+import { PageProps } from "@/.next/types/app/page";
 
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: PageProps) {
   const { id } = await params;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/problems/${id}`,
