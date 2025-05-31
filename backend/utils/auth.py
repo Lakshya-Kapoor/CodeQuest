@@ -18,22 +18,17 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 def verify_jwt_token(request: Request):
     JWT_SECRET = os.getenv("JWT_SECRET")
     ALGORITHM = os.getenv("JWT_ALGORITHM")
-    access_token = request.cookies.get("access_token")
-    print(access_token)
-    print(JWT_SECRET)
-    print(ALGORITHM)
-    if not access_token:
-        print("No access token: ", access_token)
+    auth_header = request.headers.get("authorization")
+
+    if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
-    
+    access_token = auth_header.split(" ", 1)[1]
     try:
         payload = jwt.decode(access_token, JWT_SECRET, algorithms=[ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
-        print("Token expired")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired")
     except jwt.InvalidTokenError:
-        print("Invalid token")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
     
 def is_admin(payload: dict = Depends(verify_jwt_token)):

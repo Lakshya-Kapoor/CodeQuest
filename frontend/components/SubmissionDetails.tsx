@@ -13,12 +13,12 @@ export default async function SubmissionDetails({
     `${process.env.NEXT_PUBLIC_BASE_URL}/submissions/${submission_id}/code`,
     {
       headers: {
-        Cookie: `access_token=${access_token}`,
+        Authorization: `Bearer ${access_token}`,
       },
     }
   );
   if (!res.ok) {
-    return <div className="text-2xl">Error fetching submission details</div>;
+    return <div>Error fetching submission details</div>;
   }
   const code = await res.json();
 

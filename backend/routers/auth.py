@@ -32,13 +32,6 @@ async def signup(payload: SignupRequest, response: Response):
     await user.insert()
     
     token = create_access_token({"username": user.username, "id": str(user.id), "role": user.role})
-    response.set_cookie(
-        key="access_token",
-        value=token,
-        httponly=True,
-        samesite="none",
-        secure=True
-    )
     return TokenResponse(access_token=token)
 
 @router.post("/login", response_model=TokenResponse)
@@ -49,21 +42,8 @@ async def login(payload: LoginRequest, response: Response):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     
     token = create_access_token({"username": user.username, "id": str(user.id), "role": user.role})
-    response.set_cookie(
-        key="access_token",
-        value=token,
-        httponly=True,
-        samesite="none",
-        secure=True
-    )
     return TokenResponse(access_token=token)
-
-@router.post("/logout")
-async def logout(response: Response):
-    response.delete_cookie("access_token")
-    return {"message": "Logged out successfully"}
 
 @router.get("/user")
 async def get_user_info(payload = Depends(verify_jwt_token)):
     return payload
-    

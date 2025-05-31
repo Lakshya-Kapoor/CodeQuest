@@ -39,13 +39,14 @@ export default function AuthForm({ type }: { type: "login" | "signup" }) {
       {
         method: "POST",
         body: JSON.stringify(body),
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
       }
     );
 
     if (res.ok) {
       const data = await res.json();
+      document.cookie = `access_token=${data.access_token}; path=/; secure; samesite=strict`;
+
       console.log("Login successful:", data);
       router.push("/problems");
     } else {

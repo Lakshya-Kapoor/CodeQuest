@@ -13,14 +13,14 @@ export default async function Page({ params }: PageProps) {
     `${process.env.NEXT_PUBLIC_BASE_URL}/problems/${id}/submissions`,
     {
       headers: {
-        Cookie: `access_token=${access_token}`,
+        Authorization: `Bearer ${access_token}`,
       },
       cache: "no-store",
     }
   );
 
   if (!res.ok) {
-    return <div className="text-2xl">Error fetching submissions</div>;
+    return <div>Error fetching submissions</div>;
   }
   const submissions: Submission[] = await res.json();
 
