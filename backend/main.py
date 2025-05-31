@@ -5,21 +5,21 @@ from contextlib import asynccontextmanager
 from utils import connect_db
 from routers import *
 from fastapi.middleware.cors import CORSMiddleware
-
+import os
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # load_dotenv()
-    Env().read_env()
     await connect_db()
     yield
 
+Env().read_env()
+
 app = FastAPI(lifespan=lifespan)
 
-# Add CORS middleware to allow all origins, methods, and headers
+# Add CORS middleware to allow all frontend requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[os.getenv("FRONTEND_DOMAIN")],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
