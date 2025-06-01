@@ -1,8 +1,10 @@
 from fastapi import APIRouter, File, Form, UploadFile, Depends, HTTPException
-from utils import verify_jwt_token, FileService, GCSWrapper, GCSError
+from utils import verify_jwt_token, FileService, GCSWrapper, GCSError, pubsub_publish, PubSubError
 from typing import Literal
 from models import SubmissionModel, ProblemModel
 from beanie import PydanticObjectId
+from datetime import datetime, UTC
+
 
 router = APIRouter()
 
@@ -25,6 +27,7 @@ async def create_submission(
         submission = SubmissionModel(
             user=PydanticObjectId(jwtPayload["id"]),
             problem=PydanticObjectId(problem_id),
+            submittedAt=datetime.now(UTC),
             language=language,
             status="pending"
         )
@@ -32,11 +35,17 @@ async def create_submission(
 
         blobName = f"submissions/{submission.id}"
         await GCSWrapper.upload_file(blobName, file.file)
+
+        await pubsub_publish(str(submission.id).encode())
         
         return {"message": "Submission submitted successfully"}
     
     except GCSError as e:
         await submission.delete()
+        raise HTTPException(status_code=500, detail=str(e))
+    except PubSubError as e:
+        await submission.delete()
+        await GCSWrapper.delete_file(blobName)
         raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
         if isinstance(e, HTTPException):

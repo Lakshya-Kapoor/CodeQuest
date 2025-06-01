@@ -24,6 +24,11 @@ export default async function Page({ params }: PageProps) {
   }
   const submissions: Submission[] = await res.json();
 
+  submissions.sort(
+    (a, b) =>
+      new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
+  );
+
   return (
     <>
       <SubmitSolCard problemId={id} accessToken={access_token} />

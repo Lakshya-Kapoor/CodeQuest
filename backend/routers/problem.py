@@ -3,6 +3,7 @@ from models import ProblemModel, SubmissionModel
 from utils import is_admin, FileService, FileError, GCSError, GCSWrapper, verify_jwt_token
 from typing import Literal
 from beanie import PydanticObjectId
+from datetime import datetime, UTC
 
 router = APIRouter()
 
@@ -26,7 +27,8 @@ async def create_problem(
             difficulty=difficulty,
             timeLimit=timeLimit,
             memoryLimit=memoryLimit,
-            author=PydanticObjectId(jwtPayload["id"])
+            author=PydanticObjectId(jwtPayload["id"]),
+            createdAt=datetime.now(UTC),
         )
         await problem.insert()
 

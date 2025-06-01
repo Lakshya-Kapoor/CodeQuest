@@ -15,6 +15,7 @@ export default async function SubmissionDetails({
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
+      cache: "force-cache",
     }
   );
   if (!res.ok) {

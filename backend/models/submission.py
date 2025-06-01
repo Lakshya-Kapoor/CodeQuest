@@ -5,7 +5,7 @@ from typing import Literal
 
 class SubmissionModel(Document):
     language: Literal["python"]
-    submittedAt: datetime = datetime.now(UTC)
+    submittedAt: datetime
     problem: PydanticObjectId
     user: PydanticObjectId
     status: Literal["pending", "accepted", "wrong answer", "runtime error", "compile error", "time limit exceeded", "memory limit exceeded"]

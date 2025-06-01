@@ -1,7 +1,7 @@
 from beanie import Document, PydanticObjectId
 from pydantic import Field
 from typing import Literal
-from datetime import datetime, UTC
+from datetime import datetime
 
 
 class ProblemModel(Document):
@@ -12,7 +12,7 @@ class ProblemModel(Document):
     author: PydanticObjectId
     timeLimit: int # in seconds
     memoryLimit: int # in MB
-    createdAt: datetime = datetime.now(UTC) 
+    createdAt: datetime
 
     class Settings:
         name = "problem"
