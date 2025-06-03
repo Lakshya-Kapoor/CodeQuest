@@ -1,27 +1,44 @@
 from pathlib import Path
 from models import SubmissionModel
 import docker
-from typing import TypedDict
+from typing import TypedDict, Literal
 
 class ContainerConfig(TypedDict):
+    language: Literal["python", "cpp"]
     timeLimit: int
     memoryLimit: int
+
+image = {
+    "python": "python-runner",
+    "cpp": "cpp-runner",
+}
+
+def command(language: str, timeLimit: int) -> str:
+    if language == "python":
+        return f"timeout {timeLimit}s python3 code.py"
+    elif language == "cpp":
+        return f"timeout {timeLimit}s g++ code.cpp -o /tmp/code && timeout {timeLimit}s /tmp/code"
+    else:
+        raise ValueError(f"Unsupported language: {language}")
 
 def judge_testcase(submission_folder:Path, testcase_path: Path, output_path: Path, docker_client: docker.DockerClient, config: ContainerConfig):
     (submission_folder / "input.txt").write_text(testcase_path.read_text())
 
-    root_dir = Path("/home/lakshya-kapoor/Projects/Code-Quest/submission-worker")
-    mount_path = root_dir / submission_folder
+    mount_path = Path("/home/lakshya-kapoor/Projects/Code-Quest/submission-worker") / submission_folder
+
+    memoryLimit = config["memoryLimit"]
+    timeLimit = config["timeLimit"]
+    language = config["language"]
 
     try:
         container = docker_client.containers.run(
-            image="python-runner",
-            command=["sh", "-c", f"timeout {config['timeLimit']}s python3 code < input.txt"],
+            image=image[language],
+            command=["sh", "-c", f"{command(language, timeLimit)} < input.txt"],
             volumes={
                 str(mount_path): {"bind": "/app", "mode": "ro"}
             },
             network_mode="none",
-            mem_limit=f"{config['memoryLimit']}m",
+            mem_limit=f"{memoryLimit}m",
             cpu_quota=100000,
             cpu_period=100000,
             pids_limit=64,
@@ -52,15 +69,17 @@ def judge_testcase(submission_folder:Path, testcase_path: Path, output_path: Pat
             else:
                 status = "WA"
         else:
-            status = "RTE"
+            status = "ER"
             if exit_status["StatusCode"] == 1:
-                status = "RTE"
+                status = "ER"
             elif exit_status["StatusCode"] == 124:
                 status = "TLE"
+            elif exit_status["StatusCode"] == 137:
+                status = "MLE"
 
     except Exception as e:
         print(f"Error occurred: {e}")
-        status = "RTE"
+        status = "ER"
 
     return status
 
@@ -72,6 +91,7 @@ def judge_submission(submission: SubmissionModel, docker_client: docker.DockerCl
 
     # Extract the problem timeLimit and memory limit from the submission
     config: ContainerConfig = {
+        "language": submission.language,
         "timeLimit": submission.problem.timeLimit,
         "memoryLimit": submission.problem.memoryLimit
     }

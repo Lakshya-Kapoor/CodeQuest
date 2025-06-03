@@ -32,7 +32,7 @@ export type Submission = {
     | "memory limit exceeded";
 };
 
-export type Language = "python";
+export type Language = "python" | "cpp";
 
 export type User = {
   username: string;

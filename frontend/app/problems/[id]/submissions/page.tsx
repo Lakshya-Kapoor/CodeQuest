@@ -1,6 +1,6 @@
 import { PageProps } from "@/.next/types/app/page";
 import SubmissionsTable from "@/components/SubmissionsTable";
-import SubmitSolCard from "@/components/ui/SubmitSolCard";
+import SubmitSolutionButton from "@/components/ui/SubmitSolutionButton";
 import { Submission } from "@/lib/custom-types";
 import { cookies } from "next/headers";
 
@@ -31,7 +31,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <>
-      <SubmitSolCard problemId={id} accessToken={access_token} />
+      <SubmitSolutionButton problemId={id} accessToken={access_token} />
       <SubmissionsTable submissions={submissions} />
     </>
   );

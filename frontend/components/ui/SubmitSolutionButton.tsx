@@ -16,13 +16,11 @@ import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const languages = [
-  { value: "cpp", label: "C++" },
   { value: "python", label: "Python" },
-  { value: "java", label: "Java" },
-  { value: "javascript", label: "JavaScript" },
+  { value: "cpp", label: "C++" },
 ];
 
-export default function SubmitSolCard({
+export default function SubmitSolutionButton({
   problemId,
   accessToken,
 }: {

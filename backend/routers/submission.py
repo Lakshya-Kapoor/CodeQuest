@@ -1,10 +1,9 @@
 from fastapi import APIRouter, File, Form, UploadFile, Depends, HTTPException
-from utils import verify_jwt_token, FileService, GCSWrapper, GCSError, pubsub_publish, PubSubError
+from utils import verify_jwt_token, FileService, GCSWrapper, GCSError, pubsub_publish, PubSubError, Language
 from typing import Literal
 from models import SubmissionModel, ProblemModel
 from beanie import PydanticObjectId
 from datetime import datetime, UTC
-
 
 router = APIRouter()
 
@@ -13,7 +12,7 @@ async def create_submission(
     jwtPayload = Depends(verify_jwt_token),
     file: UploadFile = File(...),
     problem_id: str = Form(...),
-    language: Literal["python"] = Form(...)
+    language: Language = Form(...)
 ):
     try:
         problem = await ProblemModel.get(PydanticObjectId(problem_id))

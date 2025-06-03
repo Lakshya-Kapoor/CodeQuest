@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, File, Form, UploadFile, HTTPException, status, Query
 from models import ProblemModel, SubmissionModel
-from utils import is_admin, FileService, FileError, GCSError, GCSWrapper, verify_jwt_token
+from utils import is_admin, FileService, FileError, GCSError, GCSWrapper, verify_jwt_token, Difficulty
 from typing import Literal
 from beanie import PydanticObjectId
 from datetime import datetime, UTC
@@ -12,7 +12,7 @@ async def create_problem(
     jwtPayload = Depends(is_admin),
     file: UploadFile = File(...),
     title: str = Form(...),
-    difficulty: Literal["easy", "medium", "hard"] = Form(...),
+    difficulty: Difficulty = Form(...),
     timeLimit: int = Form(...),
     memoryLimit: int = Form(...),
 ):

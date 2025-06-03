@@ -1,3 +1,4 @@
+from .custom_types import Difficulty, Language, Status
 from .db import connect_db
 from .auth import create_access_token, verify_jwt_token, is_admin, is_user
 from .file_service import FileService, FileError
@@ -15,5 +16,8 @@ __all__ = [
     "GCSError",
     "GCSWrapper",
     "pubsub_publish",
-    "PubSubError"
+    "PubSubError",
+    "Difficulty",
+    "Language",
+    "Status"
 ]

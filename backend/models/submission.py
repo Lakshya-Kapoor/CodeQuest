@@ -1,14 +1,14 @@
 from beanie import Document
 from beanie.odm.fields import PydanticObjectId
-from datetime import datetime, UTC
-from typing import Literal
+from datetime import datetime
+from utils import Language, Status
 
 class SubmissionModel(Document):
-    language: Literal["python"]
+    language: Language
     submittedAt: datetime
     problem: PydanticObjectId
     user: PydanticObjectId
-    status: Literal["pending", "accepted", "wrong answer", "runtime error", "compile error", "time limit exceeded", "memory limit exceeded"]
+    status: Status
 
     class Settings:
         name = "submission"

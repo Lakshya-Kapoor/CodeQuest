@@ -4,6 +4,12 @@ from .judge import judge_submission
 import os
 import zipfile
 from docker import DockerClient
+import shutil
+
+extension = {
+    "python": "py",
+    "cpp": "cpp",
+}
 
 def process_message(message, docker_client: DockerClient):
     try:
@@ -23,7 +29,7 @@ def process_message(message, docker_client: DockerClient):
 
         # Fetch submission code from GCS
         blob_name = f"submissions/{submission_id}"
-        download_path = os.path.join(folder, "code")
+        download_path = os.path.join(folder, f"code.{extension[submission.language]}")
         GCSWrapper.download_file(blob_name, download_path)
 
         # Fetch problem testcases from GCS
@@ -44,10 +50,12 @@ def process_message(message, docker_client: DockerClient):
             submission.status = "accepted"
         elif status == "WA":
             submission.status = "wrong answer"
-        elif status == "RTE":
-            submission.status = "runtime error"
+        elif status == "ER":
+            submission.status = "error"
         elif status == "TLE":
             submission.status = "time limit exceeded"
+        elif status == "MLE":
+            submission.status = "memory limit exceeded"
         submission.save()
         
         message.ack()
@@ -55,3 +63,11 @@ def process_message(message, docker_client: DockerClient):
     except Exception as e:
         print(f"Error processing {submission_id}:", e)
         message.nack()
+
+    finally:
+        # Delete the folder created for the submission
+        try:
+            if os.path.exists(folder):
+                shutil.rmtree(folder)
+        except Exception as cleanup_error:
+            print(f"Error cleaning up folder {folder}:", cleanup_error)
