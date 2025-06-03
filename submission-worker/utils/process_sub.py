@@ -1,9 +1,11 @@
 from models import SubmissionModel
-from utils import GCSWrapper
+from .gcs_wrapper import GCSWrapper
+from .judge import judge_submission
 import os
 import zipfile
+from docker import DockerClient
 
-def process_message(message):
+def process_message(message, docker_client: DockerClient):
     try:
         submission_id = message.data.decode()
         print(f"Processing submission {submission_id}...")
@@ -16,7 +18,7 @@ def process_message(message):
             return
         
         # Setting up directory for downloading files
-        folder = f"submissions/{submission_id}"
+        folder = f"tmp/{submission_id}"
         os.makedirs(folder, exist_ok=True)
 
         # Fetch submission code from GCS
@@ -35,7 +37,19 @@ def process_message(message):
             zip.extractall(folder)
 
         # Build and run appropriate Docker image
+        status = judge_submission(submission, docker_client)
+        
         # Update submission metadata on the basis of the result
+        if status == "AC":
+            submission.status = "accepted"
+        elif status == "WA":
+            submission.status = "wrong answer"
+        elif status == "RTE":
+            submission.status = "runtime error"
+        elif status == "TLE":
+            submission.status = "time limit exceeded"
+        submission.save()
+        
         message.ack()
         print(f"Processed {submission_id} successfully.")
     except Exception as e:
