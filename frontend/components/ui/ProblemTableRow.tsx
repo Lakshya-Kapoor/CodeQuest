@@ -21,7 +21,7 @@ export default function ProblemTableRow({ problem }: { problem: Problem }) {
         <Badge difficulty={problem.difficulty} />
       </td>
       <td className="px-6 py-4 w-[15%] text-sm text-muted-foreground">
-        <AccuracyBar accuracy={problem.accuracy} />
+        <AccuracyBar accuracy={problem.accuracy!} />
       </td>
     </tr>
   );
