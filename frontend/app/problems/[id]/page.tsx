@@ -20,8 +20,8 @@ export default async function Page({ params }: PageProps) {
   }
 
   const problem: Problem = await res.json();
-  problem.accuracy = 70;
-  problem.tags = ["math", "greedy", "dynamic programming"];
+  problem.accuracy =
+    (problem.acceptedCount / problem.submissionCount) * 100 || 0;
 
   return (
     <div className="border border-border p-7 rounded-lg flex flex-col items-start gap-5">

@@ -13,6 +13,8 @@ class ProblemModel(Document):
     timeLimit: int # in seconds
     memoryLimit: int # in MB
     createdAt: datetime
+    submissionCount: int
+    acceptedCount: int
 
     class Settings:
         name = "problem"

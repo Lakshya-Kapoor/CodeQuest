@@ -48,6 +48,8 @@ def process_message(message, docker_client: DockerClient):
         # Update submission metadata on the basis of the result
         if status == "AC":
             submission.status = "accepted"
+            submission.problem.acceptedCount += 1
+            submission.problem.save()
         elif status == "WA":
             submission.status = "wrong answer"
         elif status == "ER":

@@ -12,6 +12,7 @@ async def create_problem(
     jwtPayload = Depends(is_admin),
     file: UploadFile = File(...),
     title: str = Form(...),
+    tags: str = Form(...),
     difficulty: Difficulty = Form(...),
     timeLimit: int = Form(...),
     memoryLimit: int = Form(...),
@@ -21,14 +22,28 @@ async def create_problem(
         FileService.validate_zip(file)
         problemStatement = FileService.extract_problem_statement(file)
 
+        if timeLimit > 10:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Time limit cannot be greater than 10 seconds"
+            )
+        if memoryLimit > 512:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Memory limit cannot be greater than 512 MB"
+            )
+
         problem = ProblemModel(
             title=title,
             problemStatement=problemStatement,
             difficulty=difficulty,
+            tags=tags.split(","),
             timeLimit=timeLimit,
             memoryLimit=memoryLimit,
             author=PydanticObjectId(jwtPayload["id"]),
             createdAt=datetime.now(UTC),
+            submissionCount=0,
+            acceptedCount=0
         )
         await problem.insert()
 

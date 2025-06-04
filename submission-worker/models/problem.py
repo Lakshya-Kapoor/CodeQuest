@@ -12,5 +12,7 @@ class ProblemModel(Document):
     timeLimit = IntField(required=True)  # in seconds
     memoryLimit = IntField(required=True)  # in MB
     createdAt = DateTimeField(required=True, default=datetime.utcnow)
+    submissionCount = IntField(required=True)
+    acceptedCount = IntField(required=True)
 
     meta = {"collection": "problem"}

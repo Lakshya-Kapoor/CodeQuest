@@ -4,6 +4,7 @@ from typing import Literal
 from models import SubmissionModel, ProblemModel
 from beanie import PydanticObjectId
 from datetime import datetime, UTC
+import asyncio
 
 router = APIRouter()
 
@@ -30,7 +31,13 @@ async def create_submission(
             language=language,
             status="pending"
         )
-        await submission.insert()
+
+        problem.submissionCount += 1
+
+        await asyncio.gather(
+            problem.save(),
+            submission.insert()
+        )
 
         blobName = f"submissions/{submission.id}"
         await GCSWrapper.upload_file(blobName, file.file)
@@ -49,6 +56,7 @@ async def create_submission(
     except Exception as e:
         if isinstance(e, HTTPException):
             raise e
+        print(e)
         raise HTTPException(status_code=500, detail="Server error")
 
 @router.get("")

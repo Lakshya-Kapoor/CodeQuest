@@ -50,10 +50,10 @@ export default function ProblemsTable({ problems }: { problems: Problem[] }) {
           return sortConfig.direction === "asc" ? valA - valB : valB - valA;
         }
 
-        if (a[sortConfig.key!] < b[sortConfig.key!]) {
+        if (a[sortConfig.key!]! < b[sortConfig.key!]!) {
           return sortConfig.direction === "asc" ? -1 : 1;
         }
-        if (a[sortConfig.key!] > b[sortConfig.key!]) {
+        if (a[sortConfig.key!]! > b[sortConfig.key!]!) {
           return sortConfig.direction === "asc" ? 1 : -1;
         }
         return 0;

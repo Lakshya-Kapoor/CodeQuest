@@ -7,8 +7,10 @@ export type Problem = {
   author: string;
   timeLimit: number;
   memoryLimit: number;
-  accuracy: number;
   createdAt: string;
+  submissionCount: number;
+  acceptedCount: number;
+  accuracy?: number;
 };
 
 export type SortConfig = {

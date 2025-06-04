@@ -12,7 +12,11 @@ export default async function Page() {
 
   const problems: Problem[] = await res.json();
 
-  problems.forEach((problem) => (problem.accuracy = 60));
+  problems.forEach(
+    (problem) =>
+      (problem.accuracy =
+        (problem.acceptedCount / problem.submissionCount) * 100 || 0)
+  );
 
   return <ProblemsTable problems={problems} />;
 }
