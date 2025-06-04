@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,11 +7,8 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <Navbar />
-      <main className="2xl:w-[75%] xl:w-[85%] w-full mx-auto space-y-4 p-10">
-        {children}
-      </main>
-    </>
+    <main className="2xl:w-[75%] xl:w-[85%] w-full mx-auto space-y-4 p-10">
+      {children}
+    </main>
   );
 }

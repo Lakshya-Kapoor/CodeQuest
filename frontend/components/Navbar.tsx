@@ -3,6 +3,7 @@ import { getUser } from "@/lib/auth";
 import LogoutButton from "./ui/LogoutButton";
 import LoginButton from "./ui/LoginButton";
 import ThemeToggle from "./theme-toggle";
+import Image from "next/image";
 
 export default async function Navbar() {
   const user = await getUser();
@@ -10,12 +11,22 @@ export default async function Navbar() {
   return (
     <nav className="sticky top-0 left-0 w-full z-50 bg-background h-16 flex items-center justify-between px-10 shadow-lg border-b-2 border-border">
       <div className="flex items-center gap-14">
-        <div className="text-2xl flex gap-1 ">
-          <span className="font-extrabold bg-blue-500 px-1.5 rounded-lg">
-            {"<>"}
-          </span>
-          <span className="font-semibold">CodeQuest</span>
-        </div>
+        <Link href="/">
+          <Image
+            src="/dark-logo.svg"
+            alt="Logo"
+            width={175}
+            height={25}
+            className="hidden dark:inline-block"
+          />
+          <Image
+            src="/light-logo.svg"
+            alt="Logo"
+            width={175}
+            height={25}
+            className="dark:hidden"
+          />
+        </Link>
         <div>
           <Link
             href="/problems"
