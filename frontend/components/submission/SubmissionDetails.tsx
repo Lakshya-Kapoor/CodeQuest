@@ -1,5 +1,10 @@
 import { cookies } from "next/headers";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "./ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "../ui/dialog";
 
 export default async function SubmissionDetails({
   submission_id,

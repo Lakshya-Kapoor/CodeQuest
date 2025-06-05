@@ -12,7 +12,10 @@ export default function LogoutButton() {
   }
 
   return (
-    <Button className="hover:cursor-pointer" onClick={handleLogout}>
+    <Button
+      className="hover:cursor-pointer hover:scale-105"
+      onClick={handleLogout}
+    >
       Logout
     </Button>
   );

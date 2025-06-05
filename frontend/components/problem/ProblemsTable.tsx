@@ -2,10 +2,10 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Problem, SortConfig } from "@/lib/custom-types";
-import TableHeader from "./ui/ProblemTableHeader";
-import TableRow from "./ui/ProblemTableRow";
-import SearchBar from "./ui/SearchBar";
-import Pagination from "./ui/Pagination";
+import TableHeader from "@/components/problem/ProblemTableHeader";
+import TableRow from "@/components/problem/ProblemTableRow";
+import SearchBar from "@/components/problem/SearchBar";
+import Pagination from "@/components/ui/Pagination";
 
 const PROBLEMS_PER_PAGE = 50;
 

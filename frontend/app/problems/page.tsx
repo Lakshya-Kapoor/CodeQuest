@@ -1,4 +1,4 @@
-import ProblemsTable from "@/components/ProblemsTable";
+import ProblemsTable from "@/components/problem/ProblemsTable";
 import { Problem } from "@/lib/custom-types";
 
 export default async function Page() {

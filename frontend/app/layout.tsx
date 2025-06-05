@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ThemeProvider from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
+import { Inter } from "next/font/google";
 
 export const metadata: Metadata = {
   title: "CodeQuest",
   description: "A platform for coding questions",
 };
+
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -15,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen flex flex-col">
+      <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

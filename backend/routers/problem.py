@@ -22,15 +22,15 @@ async def create_problem(
         FileService.validate_zip(file)
         problemStatement = FileService.extract_problem_statement(file)
 
-        if timeLimit > 10:
+        if timeLimit > 10 or timeLimit <= 0:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Time limit cannot be greater than 10 seconds"
+                detail="Time limit must be between 1 and 10 seconds"
             )
-        if memoryLimit > 512:
+        if memoryLimit > 512 or memoryLimit < 6:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Memory limit cannot be greater than 512 MB"
+                detail="Memory limit must be between 6 and 512 MB"
             )
 
         problem = ProblemModel(

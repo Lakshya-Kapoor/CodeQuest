@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { Problem } from "@/lib/custom-types";
 import Badge from "../DifficultyBadge";
-import AccuracyBar from "./AccuracyBar";
+import AccuracyBar from "../ui/AccuracyBar";
 
 export default function ProblemTableRow({ problem }: { problem: Problem }) {
   const router = useRouter();

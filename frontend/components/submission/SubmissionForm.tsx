@@ -1,17 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
-import { Label } from "./label";
-import { Input } from "./input";
+import { useState } from "react";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./select";
-import { Button } from "./button";
-import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "./dialog";
+} from "../ui/select";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+} from "../ui/dialog";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +25,7 @@ const languages = [
   { value: "cpp", label: "C++" },
 ];
 
-export default function SubmitSolutionButton({
+export default function SubmissionForm({
   problemId,
   accessToken,
 }: {
@@ -54,8 +59,12 @@ export default function SubmitSolutionButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <PlusIcon /> Submit solution
+        <Button
+          className=" group transition-all duration-300 hover:scale-105"
+          variant="outline"
+        >
+          <PlusIcon className="mr-2 h-4 w-4 group-hover:rotate-90 transition-transform duration-200" />
+          Submit solution
         </Button>
       </DialogTrigger>
       <DialogContent className="w-auto max-w-none">
@@ -69,12 +78,7 @@ export default function SubmitSolutionButton({
             <Label htmlFor="file" className="text-foreground text-nowrap">
               Solution:{" "}
             </Label>
-            <Input
-              type="file"
-              name="file"
-              accept=".js,.py,.java,.cpp"
-              required
-            />
+            <Input type="file" name="file" accept=".py,.cpp" required />
           </div>
           <div className="flex items-center gap-3">
             <Label htmlFor="language" className="text-foreground">

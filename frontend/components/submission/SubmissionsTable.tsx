@@ -1,6 +1,6 @@
 import { Submission } from "@/lib/custom-types";
-import StatusBadge from "./ui/StatusBadge";
-import LanguageBadge from "./ui/LanguageBadge";
+import StatusBadge from "../ui/StatusBadge";
+import LanguageBadge from "../ui/LanguageBadge";
 import SubmissionDetails from "./SubmissionDetails";
 
 export default function SubmissionsTable({

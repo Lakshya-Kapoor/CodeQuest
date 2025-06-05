@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getUser } from "@/lib/auth";
 import LogoutButton from "./ui/LogoutButton";
-import LoginButton from "./ui/LoginButton";
 import ThemeToggle from "./theme-toggle";
 import Image from "next/image";
+import { Button } from "./ui/button";
 
 export default async function Navbar() {
   const user = await getUser();
@@ -40,11 +40,25 @@ export default async function Navbar() {
           >
             Discuss
           </Link>
+          {user && user.role === "admin" && (
+            <Link
+              href="/problems/create"
+              className="text-lg hover:bg-secondary active:bg-sidebar px-3 py-1.5 rounded-full"
+            >
+              Create
+            </Link>
+          )}
         </div>
       </div>
       <div className="flex items-center gap-4">
         <ThemeToggle />
-        {user ? <LogoutButton /> : <LoginButton />}
+        {user ? (
+          <LogoutButton />
+        ) : (
+          <Button asChild className="hover:scale-105">
+            <Link href="/login">Login</Link>
+          </Button>
+        )}
       </div>
     </nav>
   );
