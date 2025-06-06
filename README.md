@@ -11,21 +11,21 @@ This is CodeQuest a small scale replication of platforms like LeetCode, Codeforc
 
 ## Techstack
 
-- ### Frontend
+- **Frontend**
 
   - Next.js (App Router)
   - Shadcn UI
   - Tailwind CSS
 
-- ### Backend
+- **Backend**
 
   - FastAPI
   - MongoDB
   - Pub/Sub
+
+- **DevOps**
+
   - Docker
-
-- ### DevOps
-
   - Vercel: For next.js deployment
   - Google cloud run: For backend REST API deployment
   - Google cloud pub/sub: For submission processing
@@ -53,9 +53,12 @@ The submission flow is the core of the system design of the platform. It involve
 
 4. Cloud Run for Backend: FastAPI is deployed on Google Cloud Run, which provides a serverless environment that scales automatically.
 
+5. Compute Engine for submission-worker: The choice of using a virtual machine allowed finer control to store language runtime images and spinup containers for execution of submissions. However this isn't autoscalabale.
+
 ## TODOs
 
 - Add some realtime capabilities which allows users to see their submission status update realtime without reload.
 - Add support for more language runtimes.
 - Add profile page UI for users and admin.
 - Add discuss forum.
+- Make the submission-worker autoscalable
